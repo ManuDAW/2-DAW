@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercises3</title>
+</head>
+<body>
+    <h1>Enter Month and Year</h1>
+    <form method="POST" action="valida.php">
+        <label for="month">Month:</label>
+        <input type="number" name="month" min="1" max="12" required/><br />
+
+        <label for="year">Year (Format YYYY):</label>
+        <input type="number" name="year" pattern="[0-9]{4}" required/><br />
+
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>

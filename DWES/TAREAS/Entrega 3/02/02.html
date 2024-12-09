@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercises3</title>
+</head>
+<body>
+    <form method="POST" action="valida.php">
+        <label for="month">Month:</label><br/>
+        <input type="radio" name="month" value="1" required> January<br/>
+        <input type="radio" name="month" value="2" required> February<br/>
+        <input type="radio" name="month" value="3" required> March<br/>
+        <input type="radio" name="month" value="4" required> April<br/>
+        <input type="radio" name="month" value="5" required> May<br/>
+        <input type="radio" name="month" value="6" required> June<br/>
+        <input type="radio" name="month" value="7" required> July<br/>
+        <input type="radio" name="month" value="8" required> August<br/>
+        <input type="radio" name="month" value="9" required> September<br/>
+        <input type="radio" name="month" value="10" required> October<br/>
+        <input type="radio" name="month" value="11" required> November<br/>
+        <input type="radio" name="month" value="12" required> December<br/>
+
+        <label for="year">Year (Format YYYY):</label>
+        <input type="number" name="year" pattern="[0-9]{4}" required/><br/>
+
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>

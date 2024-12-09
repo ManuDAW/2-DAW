@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercises3</title>
+    <style>
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>CONVERTOR</h1>
+    <form method="POST" action="valida.php">
+        <div class="form-container">
+            <label for="euros">Euros: </label>
+            <input type="number" name="euros"/><br>
+
+            <label for="currency">Convert to: </label>
+            <select name="currency">
+                <option value="usd">US Dollars</option>
+                <option value="jpy">Japanese Yen</option>
+                <option value="chf">Swiss Francs</option>
+            </select>
+        </div>
+        <br>
+        <input type="submit" value="Send">
+
+    </form>
+</body>
+</html>
