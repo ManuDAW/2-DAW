@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Jose Fajardo">
+    <title>E04</title>
+    <style>
+        .campo {
+            display: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="formularioDinamico">
+        <label for="numeroDeCampos">Selecciona el número de campos:</label>
+        <select id="numeroDeCampos">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+        <button type="button" id="botonGenerarFormulario">Generar Formulario</button>
+        <div id="campos"></div>
+        <button type="submit">Enviar</button>
+    </form>
+    <script>
+
+        document.getElementById('botonGenerarFormulario').addEventListener('click', function() {
+            const numeroDeCampos = parseInt(document.getElementById('numeroDeCampos').value);
+            const contenedorCampos = document.getElementById('campos');
+            contenedorCampos.innerHTML = '';
+            for (let i = 0; i < numeroDeCampos; i++) {
+                const etiqueta = document.createElement('label');
+                etiqueta.textContent = `Campo ${i + 1}:`;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = `campo${i + 1}`;
+                input.className = 'campo';
+                etiqueta.className = 'campo';
+                contenedorCampos.appendChild(etiqueta);
+                contenedorCampos.appendChild(input);
+            }
+
+            const campos = document.querySelectorAll('.campo');
+            campos.forEach(campo => campo.style.display = 'block');
+        });
+
+        document.getElementById('formularioDinamico').addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            alert('Formulario enviado');
+        });
+    </script>
+</body>
+</html>

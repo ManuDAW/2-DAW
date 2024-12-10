@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega3</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .imagen-ahorcado {
+            position: relative; /* Posición relativa para permitir que la lupa se superponga */
+            margin-right: 20px;
+        }
+        #ahorcado-img {
+            width: 150px;
+            height: 200px;
+            margin-top: 77px;
+        }
+        .lupa {
+            position: absolute; /* Posicionamos la lupa sobre la imagen del ahorcado */
+            top: 73px;
+            left: -30px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        .cajaLetras {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .letter-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid black;
+            text-align: center;
+            line-height: 40px;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .letter-input {
+            width: 50px;
+            text-align: center;
+            font-size: 24px;
+        }
+        #mensajes {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .letras-usadas-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #letras-usadas {
+            width: 350px;
+            padding: 10px;
+            font-size: 16px;
+            text-align: left;
+            border: 1px solid black;
+            box-sizing: border-box;
+            display: none; /* Ocultado por defecto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="imagen-ahorcado">
+            <img id="ahorcado-img" src="../Entrega 3/Imagenes/ahorcado7.jpg" alt="Ahorcado">
+            <img src="../Entrega 3/Imagenes/buscar.jpeg" alt="Mostrar/ocultar letras usadas" class="lupa" onclick="funcionLetras()">
+        </div>
+
+        <div>
+            <h1>Ahorcado</h1>
+            <div class="cajaLetras" id="cajaLetras"></div>
+            <p>Vidas: <span id="vidas">7</span></p>
+            <p id="mensajes">Esperando nueva letra</p>
+            <label for="letra">Letra:</label>
+            <input type="text" id="letra" maxlength="1" class="letter-input">
+            <button onclick="comprobarLetra()">Probar letra</button>
+
+            <!-- Campo para mostrar letras usadas -->
+            <div class="letras-usadas-container">
+                <p>Letras usadas:</p>
+                <input type="text" id="letras-usadas" readonly>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const palabras = ["coche", "universidad", "novembre", "electrodomestico", "septiembre", "banquete", "tormenta", "hipervinculo"];
+        let palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)].toUpperCase();
+        let vidas = 7;
+        let palabraOculta = Array(palabraSecreta.length).fill('_');
+        let imagenActual = 7;
+        let letrasUsadas = [];
+        let juegoTerminado = false;
+
+        // Crea los recuadros para la palabra
+        function dibujarPalabraOculta() {
+            const wordBox = document.getElementById("cajaLetras");
+            wordBox.innerHTML = ''; // Limpia el contenido previo
+            palabraOculta.forEach(letra => {
+                const letterBox = document.createElement('div');
+                letterBox.classList.add('letter-box');
+                letterBox.innerText = letra === '_' ? '' : letra;
+                wordBox.appendChild(letterBox);
+            });
+        }
+
+        // Función para comprobar la letra
+        function comprobarLetra(letra = null) {
+            if (juegoTerminado) return;  // Si el juego ha terminado, no hacer nada
+
+            let inputLetra;
+            if (letra) {
+                inputLetra = letra.toUpperCase();
+            } else {
+                inputLetra = document.getElementById("letra").value.toUpperCase();
+                document.getElementById("letra").value = '';
+            }
+
+            if (inputLetra) {
+                // Verifica si la letra ya ha sido usada
+                if (letrasUsadas.includes(inputLetra)) {
+                    // Si la letra ya ha sido usada, restamos una vida y mostramos el mensaje correspondiente
+                    vidas--;
+                    imagenActual--;
+                    document.getElementById("vidas").innerText = vidas;
+                    document.getElementById("ahorcado-img").src = `../Entrega 3/Imagenes/ahorcado${imagenActual}.jpg`;
+                    document.getElementById("mensajes").innerText = "¡Letra repetida! Has perdido una vida.";
+                    // Verifica si se ha perdido el juego
+                    if (vidas === 0) {
+                        document.getElementById("mensajes").innerText = `Has perdido. La palabra era: ${palabraSecreta}`;
+                        deshabilitarJuego();
+                    }
+                    return;
+                }
+
+                letrasUsadas.push(inputLetra);
+                actualizarLetrasUsadas();
+
+                if (palabraSecreta.includes(inputLetra)) {
+                    for (let i = 0; i < palabraSecreta.length; i++) {
+                        if (palabraSecreta[i] === inputLetra) {
+                            palabraOculta[i] = inputLetra;
+                        }
+                    }
+                    document.getElementById("mensajes").innerText = "¡Letra correcta!";
+                } else {// Fallo, reducir vidas y actualizar imagen
+                    vidas--;
+                    imagenActual--;
+                    document.getElementById("vidas").innerText = vidas;
+                    document.getElementById("ahorcado-img").src = `../Entrega 3/Imagenes/ahorcado${imagenActual}.jpg`;
+                    document.getElementById("mensajes").innerText = "NO ESTÁ. Esperando nueva letra";
+                }
+
+                // Verifica si se ha perdido el juego después de reducir las vidas
+                if (vidas === 0) {
+                    document.getElementById("mensajes").innerText = `Has perdido. La palabra era: ${palabraSecreta}`;
+                    deshabilitarJuego();
+                }
+
+                // Actualiza los recuadros de la palabra oculta
+                dibujarPalabraOculta();
+                // Comprueba si ha ganado o perdido
+                verificarEstado();
+            }
+        }
+
+        // Verifica si el juego ha terminado (ganado o perdido)
+        function verificarEstado() {
+            if (palabraOculta.join('') === palabraSecreta) {
+                document.getElementById("mensajes").innerText = "¡Has ganado!";
+                deshabilitarJuego();
+            } else if (vidas === 0) {
+                document.getElementById("mensajes").innerText = `Has perdido. La palabra era: ${palabraSecreta}`;
+                deshabilitarJuego();
+            }
+        }
+
+        // Inicializar el juego al cargar la página
+        dibujarPalabraOculta();
+
+        // Actualizar las letras usadas en el input de letras usadas
+        function actualizarLetrasUsadas() {
+            document.getElementById("letras-usadas").value = letrasUsadas.join(', ');
+        }
+
+        // Deshabilitar el input y el botón cuando termina el juego
+        function deshabilitarJuego() {
+            document.getElementById("letra").disabled = true;
+            juegoTerminado = true;
+            document.removeEventListener('keydown', detectarLetra); // Eliminar el listener de teclado
+        }
+
+        // Función para detectar letras en el teclado
+        function detectarLetra(event) {
+            const letra = event.key;
+            if (/^[a-zA-Z]$/.test(letra)) {  // Verifica si la tecla es una letra
+                comprobarLetra(letra);
+            }
+        }
+
+        // Escuchar teclas en toda la página
+        document.addEventListener('keydown', detectarLetra);
+
+        // Función para mostrar/ocultar las letras usadas al hacer clic en la lupa
+        function funcionLetras() {
+            const letrasUsadasInput = document.getElementById('letras-usadas');
+            if (letrasUsadasInput.style.display === 'none') {
+                letrasUsadasInput.style.display = 'block';
+            } else {
+                letrasUsadasInput.style.display = 'none';
+            }
+        }
+
+    </script>
+</body>
+</html>

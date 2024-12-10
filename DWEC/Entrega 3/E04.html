@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega3</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        .tablero {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 2px solid green;
+            margin: 20px auto;
+        }
+
+        .maquina, .jugador {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+        }
+
+        .instrucciones {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto 20px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .button {
+            margin: 2px;
+            padding: 5px 10px;
+        }
+
+        #contador {
+            width: 130px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú de botones -->
+    <div id="Instrucciones" class="instrucciones">
+        <div class="fila">
+            <button class="button" onclick="empezar('arriba-izquierda')">Arriba-Izquierda</button>
+            <button class="button" onclick="empezar('arriba')">Arriba</button>
+            <button class="button" onclick="empezar('arriba-derecha')">Arriba-Derecha</button>
+        </div>
+        <div class="fila">
+            <button class="button" onclick="empezar('izquierda')">Izquierda</button>
+            <input type="text" id="contador" value="0" readonly>
+            <button class="button" onclick="empezar('derecha')">Derecha</button>
+        </div>
+        <div class="fila">
+            <button class="button" onclick="empezar('abajo-izquierda')">Abajo-Izquierda</button>
+            <button class="button" onclick="empezar('abajo')">Abajo</button>
+            <button class="button" onclick="empezar('abajo-derecha')">Abajo-Derecha</button>
+        </div>
+    </div>
+
+    <!-- tablero de juego -->
+    <div class="tablero" id="imagenes">
+        <img src="../Entrega 3/Imagenes/banana.gif" alt="banana" class="maquina" id="banana">
+        <img src="../Entrega 3/Imagenes/mono.gif" alt="mono" class="jugador" id="mono">
+        <img src="../Entrega 3/Imagenes/momia.gif" alt="momia" class="maquina" id="momia">
+    </div>
+
+    <script>
+        let intervalo;
+        let direccion = null;
+        const imagenMono = document.getElementById("mono");
+        const imagenMomia = document.getElementById("momia");
+        const contador = document.getElementById("contador");
+        let bananasRecogidas = 0;
+
+        // Posición inicial del mono
+        imagenMono.style.top = "150px";
+        imagenMono.style.left = "150px";
+        // Posición inicial de la momia
+        imagenMomia.style.top = "400px";
+        imagenMomia.style.left = "300px";
+
+        let juegoEnCurso = false;
+
+        function empezar(dir) {
+            if (!juegoEnCurso) {
+                reiniciarJuego();
+                juegoEnCurso = true;
+                mover();
+            }
+            direccion = dir;
+        }
+
+        function reiniciarJuego() {
+            juegoEnCurso = false;
+            imagenMono.style.top = "150px";
+            imagenMono.style.left = "150px";
+            contador.value = 0;
+            bananasRecogidas = 0;
+            imagenMomia.style.top = "400px";
+            imagenMomia.style.left = "300px";
+            clearTimeout(intervalo);
+            direccion = null;
+        }
+
+        function mover() {
+            const monoX = imagenMono.offsetLeft;
+            const monoY = imagenMono.offsetTop;
+            const contenedor = document.getElementById("imagenes");
+
+
+            if (direccion === 'arriba' && monoY > 0) {
+                imagenMono.style.top = (monoY - 7) + "px";
+            } else if (direccion === 'abajo' && monoY < contenedor.clientHeight - 75) {
+                imagenMono.style.top = (monoY + 7) + "px";
+            } else if (direccion === 'izquierda' && monoX > 0) {
+                imagenMono.style.left = (monoX - 7) + "px";
+            } else if (direccion === 'derecha' && monoX < contenedor.clientWidth - 75) {
+                imagenMono.style.left = (monoX + 7) + "px";
+            } else if (direccion === 'arriba-izquierda' && monoX > 0 && monoY > 0) {
+                imagenMono.style.top = (monoY - 5) + "px";
+                imagenMono.style.left = (monoX - 5) + "px";
+            } else if (direccion === 'arriba-derecha' && monoX < contenedor.clientWidth - 75 && monoY > 0) {
+                imagenMono.style.top = (monoY - 5) + "px";
+                imagenMono.style.left = (monoX + 5) + "px";
+            } else if (direccion === 'abajo-izquierda' && monoX > 0 && monoY < contenedor.clientHeight - 75) {
+                imagenMono.style.top = (monoY + 5) + "px";
+                imagenMono.style.left = (monoX - 5) + "px";
+            } else if (direccion === 'abajo-derecha' && monoX < contenedor.clientWidth - 75 && monoY < contenedor.clientHeight - 75) {
+                imagenMono.style.top = (monoY + 5) + "px";
+                imagenMono.style.left = (monoX + 5) + "px";
+            }
+
+            verificarColisionBordes();
+            verificarColision();
+
+
+            if (juegoEnCurso) {
+                moverMomia();
+            }
+
+            intervalo = setTimeout(mover, 50);
+        }
+
+        function verificarColisionBordes() {
+            const contenedor = document.getElementById("imagenes");
+            const monoX = imagenMono.offsetLeft;
+            const monoY = imagenMono.offsetTop;
+
+
+            if (monoY <= 0) {
+                if (direccion === 'arriba') direccion = 'abajo';
+                else if (direccion === 'arriba-izquierda') direccion = 'abajo-izquierda';
+                else if (direccion === 'arriba-derecha') direccion = 'abajo-derecha';
+            }
+            if (monoY >= contenedor.clientHeight - 75) {
+                if (direccion === 'abajo') direccion = 'arriba';
+                else if (direccion === 'abajo-izquierda') direccion = 'arriba-izquierda';
+                else if (direccion === 'abajo-derecha') direccion = 'arriba-derecha';
+            }
+            if (monoX <= 0) {
+                if (direccion === 'izquierda') direccion = 'derecha';
+                else if (direccion === 'arriba-izquierda') direccion = 'arriba-derecha';
+                else if (direccion === 'abajo-izquierda') direccion = 'abajo-derecha';
+            }
+            if (monoX >= contenedor.clientWidth - 75) {
+                if (direccion === 'derecha') direccion = 'izquierda';
+                else if (direccion === 'arriba-derecha') direccion = 'arriba-izquierda';
+                else if (direccion === 'abajo-derecha') direccion = 'abajo-izquierda';
+            }
+        }
+
+        function moverMomia() {
+            const monoX = imagenMono.offsetLeft;
+            const monoY = imagenMono.offsetTop;
+            const momiaX = imagenMomia.offsetLeft;
+            const momiaY = imagenMomia.offsetTop;
+
+            if (monoX > momiaX) {
+                imagenMomia.style.left = (momiaX + 1) + "px";
+            } else if (monoX < momiaX) {
+                imagenMomia.style.left = (momiaX - 1) + "px";
+            }
+
+            if (monoY > momiaY) {
+                imagenMomia.style.top = (momiaY + 1) + "px";
+            } else if (monoY < momiaY) {
+                imagenMomia.style.top = (momiaY - 1) + "px";
+            }
+
+            // Verifica si la momia toca al mono
+            if (verificarColisionConMomia()) {
+                alert("Game Over");
+                reiniciarJuego();
+            }
+        }
+
+        function verificarColisionConMomia() {
+            const monoX = imagenMono.offsetLeft;
+            const monoY = imagenMono.offsetTop;
+            const momiaX = imagenMomia.offsetLeft;
+            const momiaY = imagenMomia.offsetTop;
+
+            // Comprueba si hay colisión
+            return (monoX < momiaX + 75 && monoX + 75 > momiaX && monoY < momiaY + 75 && monoY + 75 > momiaY);
+        }
+
+        function verificarColision() {
+            const monoX = imagenMono.offsetLeft;
+            const monoY = imagenMono.offsetTop;
+            const banana = document.getElementById("banana");
+
+            // Posición de la banana
+            const bananaX = banana.offsetLeft;
+            const bananaY = banana.offsetTop;
+
+            // Comprobar colision
+            if (monoX < bananaX + 75 && monoX + 75 > bananaX && monoY < bananaY + 75 && monoY + 75 > bananaY) {
+                bananasRecogidas++;
+                contador.value = bananasRecogidas;
+                moverBanana(); // Mueve la banana
+            }
+        }
+
+        function moverBanana() {
+            const contenedor = document.getElementById("imagenes");
+            const maxWidth = contenedor.clientWidth - 75;
+            const maxHeight = contenedor.clientHeight - 75;
+            const nuevaPosX = Math.floor(Math.random() * (maxWidth + 1));
+            const nuevaPosY = Math.floor(Math.random() * (maxHeight + 1));
+
+            const banana = document.getElementById("banana");
+            banana.style.left = nuevaPosX + "px";
+            banana.style.top = nuevaPosY + "px";
+        }
+
+    </script>
+</body>
+</html>

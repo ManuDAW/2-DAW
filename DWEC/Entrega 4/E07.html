@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Jose Fajardo">
+    <title>E07</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .imagen-ahorcado {
+            margin-right: 20px;
+        }
+        .cajaLetras {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .letter-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid black;
+            text-align: center;
+            line-height: 40px;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .letter-input {
+            width: 50px;
+            text-align: center;
+            font-size: 24px;
+        }
+        #ahorcado-img {
+            width: 150px;
+            height: 200px;
+            margin-top: 77px;
+        }
+        #mensajes {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="imagen-ahorcado">
+            <img id="ahorcado-img" src="../Entrega 3/Imagenes/ahorcado7.jpg" alt="Ahorcado">
+        </div>
+
+        <div>
+            <h1>Ahorcado</h1>
+            <div class="cajaLetras" id="cajaLetras"></div>
+            <p>Vidas: <span id="vidas">7</span></p>
+            <p id="mensajes">Esperando nueva letra</p>
+            <label for="letra">Letra:</label>
+            <input type="text" id="letra" maxlength="1" class="letter-input">
+            <button onclick="comprobarLetra()">Probar letra</button>
+        </div>
+    </div>
+
+    <script>
+        const palabras = ["coche", "universidad", "novembre", "electrodomestico", "septiembre", "banquete", "tormenta", "hipervinculo"];
+        let palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)].toUpperCase();
+        let vidas = 7;
+        let palabraOculta = Array(palabraSecreta.length).fill('_');
+        let imagenActual = 7;
+
+        // Crea los recuadros para la palabra según su longitud
+        function dibujarPalabraOculta() {
+            const wordBox = document.getElementById("cajaLetras");
+            wordBox.innerHTML = ''; // Limpia el contenido previo
+            palabraOculta.forEach(() => {
+                const letterBox = document.createElement('div');
+                letterBox.classList.add('letter-box');
+                wordBox.appendChild(letterBox);
+            });
+        }
+
+        // Función para actualizar los recuadros con las letras adivinadas
+        function actualizarPalabraOculta() {
+            const letterBoxes = document.querySelectorAll('.letter-box');
+            palabraOculta.forEach((letra, index) => {
+                letterBoxes[index].innerText = letra === '_' ? '' : letra;
+            });
+        }
+
+        // Función para comprobar la letra
+        function comprobarLetra() {
+            const inputLetra = document.getElementById("letra").value.toUpperCase();
+            document.getElementById("letra").value = '';
+
+            if (inputLetra) {
+                if (palabraSecreta.includes(inputLetra)) {
+                    // Actualizar la palabra oculta con la letra correcta
+                    for (let i = 0; i < palabraSecreta.length; i++) {
+                        if (palabraSecreta[i] === inputLetra) {
+                            palabraOculta[i] = inputLetra;
+                        }
+                    }
+                    document.getElementById("mensajes").innerText = "¡Letra correcta!";
+                } else {
+                    // Fallo, reducir vidas y actualizar imagen
+                    vidas--;
+                    imagenActual--;
+                    document.getElementById("vidas").innerText = vidas;
+                    document.getElementById("ahorcado-img").src = `../Entrega 3/Imagenes/ahorcado${imagenActual}.jpg`;
+                    document.getElementById("mensajes").innerText = "NO ESTA. Esperando nueva letra";
+                }
+                // Actualiza los recuadros de la palabra oculta
+                actualizarPalabraOculta();
+                // Comprueba si ha ganado o perdido
+                verificarEstado();
+            }
+        }
+
+        // Verifica si el juego ha terminado (ganado o perdido)
+        function verificarEstado() {
+            if (palabraOculta.join('') === palabraSecreta) {
+                document.getElementById("mensajes").innerText = "¡Has ganado!";
+                deshabilitarJuego();
+            } else if (vidas === 0) {
+                document.getElementById("mensajes").innerText = `Has perdido. La palabra era: ${palabraSecreta}`;
+                deshabilitarJuego();
+            }
+        }
+
+        // Deshabilitar el input y el botón cuando termina el juego
+        function deshabilitarJuego() {
+            document.getElementById("letra").disabled = true;
+        }
+
+        // Inicializar el juego al cargar la página
+        dibujarPalabraOculta();
+    </script>
+</body>
+</html>

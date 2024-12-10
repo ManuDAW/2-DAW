@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        body {
+            text-align: center;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: black;
+        }
+
+        p{
+            text-align: left;
+        }
+
+        .color-box {
+            float: left;
+           
+            width: 25px;
+            height: 25px;
+            margin: 12px;
+            border: 1px solid black;
+        }
+
+        .white { background-color: white; }
+        .red { background-color: red; }
+        .yellow { background-color: yellow; }
+        .lime { background-color: lime; }
+        .blue { background-color: blue; }
+    </style>
+</head>
+<body>
+    <h1>"onMouseOver"</h1>
+    <hr>
+    <p>Uso del evento "onMouseOver" para cambiar el color de fondo moviendo el ratón sobre la imagen</p>
+    <div class="color-box white" onmouseover="cambiarFondo('white')"></div>
+    <div class="color-box red" onmouseover="cambiarFondo('red')"></div>
+    <div class="color-box yellow" onmouseover="cambiarFondo('yellow')"></div>
+    <div class="color-box lime" onmouseover="cambiarFondo('lime')"></div>
+    <div class="color-box blue" onmouseover="cambiarFondo('blue')"></div>
+    <br>
+    <br>
+    <br>
+    <hr>
+
+    <script language="JavaScript">
+        function cambiarFondo(color) {
+            document.body.style.backgroundColor = color; 
+        }         
+        
+    
+     </script>
+</body>
+</html>

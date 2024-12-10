@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega3</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        /* Ocultar los detalles al principio */
+        #detall {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <form name="formulari">
+        <table align="center">
+            <tr>
+                <td width="60">client</td>
+                <td>
+                    <select name="codi" onchange="mostrarDatosCliente(this.value)">
+                        <option value="-1">selecciona un codi de client...</option>
+                        <option value="codiclient1;client1;matricula1;marca1;model1;color1">codiclient1</option>
+                        <option value="codiclient2;client2;1234-wer;ford;mondeo;blau">codiclient2</option>
+                        <option value="codiclient3;client3;4567-fgh;audi; a4;negre">codiclient3</option>
+                        <option value="codiclient4;client4;0987-tyu;mercedes;merche;blanc">codiclient4</option>
+                    </select>
+                    <a href="#"><img src="../Entrega 3/Imagenes/buscar.jpeg" alt="buscar codi" width="18" onclick="buscarCliente()"></a>
+                    <input type="text" name="busca" size="25">
+                </td>
+            </tr>
+            <tr>
+                <td>data</td>
+                <td>
+                    <input type="text" name="data" size="55" disabled>
+                    <img src="../Entrega 3/Imagenes/triangulob.jpg" alt="mostrar detalle" width="18" onclick="mostrarDetalle()">
+                    <img src="../Entrega 3/Imagenes/trianguloa.jpg" alt="ocultar detalle" width="18" onclick="ocultarDetalle()">
+                </td>
+            </tr>
+        </table>
+
+        <div id="detall">
+            <table align="center">
+                <tr>
+                    <td width="60">codi</td>
+                    <td><input type="text" name="cod" size="66" disabled></td>
+                </tr>
+                <tr>
+                    <td>nom</td>
+                    <td><input type="text" name="nom" size="66" disabled></td>
+                </tr>
+                <tr>
+                    <td>matricula</td>
+                    <td><input type="text" name="matricula" size="66" disabled></td>
+                </tr>
+                <tr>
+                    <td>marca</td>
+                    <td><input type="text" name="marca" size="66" disabled></td>
+                </tr>
+                <tr>
+                    <td>model</td>
+                    <td><input type="text" name="model" size="66" disabled></td>
+                </tr>
+                <tr>
+                    <td>color</td>
+                    <td><input type="text" name="color" size="66" disabled></td>
+                </tr>
+            </table>
+        </div>
+
+        <center>
+            <input type="button" name="boto" value="entrada parking" onclick="validarEntrada()">
+        </center>
+    </form>
+
+    <script>
+        // Función para mostrar los datos del cliente seleccionado
+        function mostrarDatosCliente(valor) {
+            if (valor === "-1") {
+                limpiarFormulario();
+                return;
+            }
+
+            var datos = valor.split(';');
+            document.formulari.cod.value = datos[0];
+            document.formulari.nom.value = datos[1];
+            document.formulari.matricula.value = datos[2];
+            document.formulari.marca.value = datos[3];
+            document.formulari.model.value = datos[4];
+            document.formulari.color.value = datos[5];
+
+            // Añadimos la fecha y hora actual
+            var fecha = new Date();
+            document.formulari.data.value = fecha.toLocaleString();
+        }
+
+        // Función para limpiar los campos del formulario
+        function limpiarFormulario() {
+            document.formulari.cod.value = "";
+            document.formulari.nom.value = "";
+            document.formulari.matricula.value = "";
+            document.formulari.marca.value = "";
+            document.formulari.model.value = "";
+            document.formulari.color.value = "";
+            document.formulari.data.value = "";
+        }
+
+        // Función para mostrar los detalles del cliente
+        function mostrarDetalle() {
+            document.getElementById('detall').style.display = 'block';
+        }
+
+        // Función para ocultar los detalles del cliente
+        function ocultarDetalle() {
+            document.getElementById('detall').style.display = 'none';
+        }
+
+        // Función para buscar cliente en el select
+        function buscarCliente() {
+            var valorBusqueda = document.formulari.busca.value.toLowerCase();
+            var opciones = document.formulari.codi.options;
+
+            for (var i = 0; i < opciones.length; i++) {
+                if (opciones[i].text.toLowerCase().includes(valorBusqueda)) {
+                    opciones[i].selected = true;
+                    mostrarDatosCliente(opciones[i].value);
+                    return;
+                }
+            }
+
+            alert("Cliente no encontrado.");
+        }
+
+        // Función para validar la entrada antes de registrarla
+        function validarEntrada() {
+            if (document.formulari.codi.value === "-1") {
+                alert("Selecciona un cliente antes de entrar al parking.");
+            } else {
+                alert("Entrada registrada correctamente.");
+            }
+        }
+    </script>
+</body>
+</html>

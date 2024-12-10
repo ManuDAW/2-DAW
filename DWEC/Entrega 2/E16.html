@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>titol</title>
+    <meta name="description" content="HTML5">
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        .error {
+            border: 2px solid red; 
+        }
+        .error-message {
+            color: red; 
+            margin-left: 10px; 
+        }
+    </style>
+    <script language="JavaScript">
+        function valida_envia() {
+            const form = document.forms['form1'];
+            let errores = []; 
+            
+            const campos = form.querySelectorAll('.campo');
+            campos.forEach(campo => {
+                campo.classList.remove('error');
+                const errorMessage = campo.querySelector('.error-message');
+                if (errorMessage) errorMessage.remove(); 
+            });
+           
+            if (!form.nom.value) {
+                errores.push("El campo 'Nom' es obligatorio.");
+                const nombreCampo = form.nom.parentNode;
+                nombreCampo.classList.add('error');
+                nombreCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Escriu el teu nom</span>');
+            }
+            
+            if (!form.usuari.value) {
+                errores.push("El campo 'Usuari' es obligatorio.");
+                const usuarioCampo = form.usuari.parentNode;
+                usuarioCampo.classList.add('error');
+                usuarioCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Escriu el teu nom d´usuari</span>');
+            }
+        
+            if (form.clau.value.length < 6) {
+                errores.push("La 'Clau' debe tener al menos 6 caracteres.");
+                const clauCampo = form.clau.parentNode;
+                clauCampo.classList.add('error');
+                clauCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Longitud minima de 6 caracters</span>');
+            }
+
+            const edat = parseInt(form.edat.value);
+            if (isNaN(edat) || edat < 18) {
+                errores.push("Debes ser mayor de edad y escribir un número en 'Edat'.");
+                const edatCampo = form.edat.parentNode;
+                edatCampo.classList.add('error');
+                edatCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Escriu una edat vàlida</span>');
+            }
+
+            if (form.edat2.value === "-1") {
+                errores.push("Debes seleccionar una opción en 'edat2'.");
+                const edat2Campo = form.edat2.parentNode;
+                edat2Campo.classList.add('error');
+                edat2Campo.insertAdjacentHTML('beforeend', '<span class="error-message">Selecciona una opció</span>');
+            }
+
+            const sexoSeleccionado = form.sexe.value; 
+            if (!sexoSeleccionado) {
+                errores.push("Debes seleccionar una opción en 'sexe'.");
+
+                const sexeCampo = form.sexe[0].parentNode;
+                sexeCampo.classList.add('error');
+                sexeCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Selecciona el sexe</span>');
+            }
+
+            if (!form.condicions.checked) {
+                errores.push("Debes aceptar las condiciones.");
+
+                const condicionsCampo = form.condicions.parentNode;
+                condicionsCampo.classList.add('error');
+                condicionsCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Cal acceptar les condicions</span>');
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            if (!form.email.value) {
+                errores.push("El campo 'Email' es obligatorio.");
+                const emailCampo = form.email.parentNode;
+                emailCampo.classList.add('error');
+                emailCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Escriu un email</span>');
+            } else if (!emailPattern.test(form.email.value)) {
+                errores.push("Debes escribir un email válido (text@text.text).");
+                const emailCampo = form.email.parentNode;
+                emailCampo.classList.add('error');
+                emailCampo.insertAdjacentHTML('beforeend', '<span class="error-message">Escriu un email vàlid</span>');
+            }
+
+            if (errores.length > 0) {
+                alert(errores.join("\n")); 
+                return; 
+            } else {
+                alert("Formulario enviado con éxito.");
+                form.reset();
+            }
+
+        }
+    </script>
+</head>
+<body>
+    <h1>formulari</h1>
+    <form name="form1">
+        <fieldset>
+            <legend>formulari:</legend>
+            <table>
+                <tr class="campo">
+                    <td>Nom: </td>
+                    <td><input type="text" name="nom" size="30" maxlength="100">-----> cal escriure algo</td>
+                </tr>
+                <tr class="campo">
+                    <td>usuari: </td>
+                    <td><input type="text" name="usuari" size="30" maxlength="100">-----> cal escriure algo</td>
+                </tr>
+                <tr class="campo">
+                    <td>clau: </td>
+                    <td><input type="password" name="clau">-----> longitud mínima 6 caracters</td>
+                </tr>
+                <tr class="campo">
+                    <td>Edat: </td>
+                    <td><input type="text" name="edat" size="3" maxlength="2">-----> cal ser major d'edat i escriure un numero en el camp</td>
+                </tr>
+                <tr class="campo">
+                    <td>edat2:</td>
+                    <td>
+                        <select name="edat2">
+                            <option value="-1">Elegeix una opcio.......</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select> -----> cal seleccionar una opcio
+                    </td>
+                </tr>
+                <tr class="campo">
+                    <td colspan="2" align="center"><input type="checkbox" name="condicions" value="acepta">acepta les condicions -----> es obligatori seleccionar el camp</td>
+                </tr>
+                <tr class="campo">
+                    <td>sexe: </td>
+                    <td>
+                        <input type="radio" name="sexe" value="h">home 
+                        <input type="radio" name="sexe" value="d">dona -----> obligatori seleccionar alguna opcio del grup
+                    </td>
+                </tr>
+                <tr class="campo">
+                    <td>email: </td>
+                    <td><input type="text" name="email" size="40" maxlength="100">-----> cal escriure un email valid (text@text.text)</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="button" value="Enviar" onclick="valida_envia()"></td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+</body>
+</html>
