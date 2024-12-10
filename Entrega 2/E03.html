@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+</head>
+<body>
+    <script language="JavaScript">
+    const vector = ['http://www.google.es', 'http://www.bing.com','http://www.apple.com'];
+  
+    let i = 0; 
+    function abrirVentana() {
+        window.open(vector[i]); 
+        i = (i + 1) % vector.length; 
+    }
+    setInterval(abrirVentana, 2000);
+
+    </script>
+</body>
+</html>

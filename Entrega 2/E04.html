@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+</head>
+<body>
+    <script language="JavaScript">
+    const vector = [
+        'http://www.upv.es', 
+        'http://www.bing.com',
+        'http://www.apple.com',
+        'http://familia.edu.gva.es/',
+        'http://github.com',
+        'http://www.spotify.com',
+        'http://www.amazon.com',
+        'http://portal.edu.gva.es',
+        'http://www.netflix.com',
+        'http://portal.edu.gva.es/iessantvicent/'
+    ];
+  
+    let i = 0;
+    var ventanasabiertas = []; 
+    function abrirVentana() {
+        if (i < vector.length) {
+            var nuevaventana = window.open(vector[i]); 
+            ventanasabiertas.push(nuevaventana);
+            i = (i + 1); 
+        setTimeout(abrirVentana, 2000);
+        }
+        else cerrarventanas();
+
+        function cerrarventanas(){
+            for (var j = 0; j < ventanasabiertas.length; j++) {
+                ventanasabiertas[j].close();
+        }
+     }
+    }
+    abrirVentana(); 
+    </script>
+</body>
+</html>

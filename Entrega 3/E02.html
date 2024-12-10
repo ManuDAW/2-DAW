@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega3</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        .cyan {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: cyan;
+            border: 2px;
+            border-style: solid;
+            border-color: black;
+            top: 300px;
+            left: 500px;
+        }
+        .instrucciones {
+            border: 1px;
+            width: 250px;
+            height: 80px;
+            border-style: solid;
+            border-color: black;
+        }
+        .fila {
+            display: flex;
+            justify-content: center;
+        }
+        .button {
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cyan" class="cyan">
+        Capa 1 setInterval
+    </div>
+
+    <div id="Instrucciones" class="instrucciones">
+        <div class="fila">
+            <button class="button" onclick="empezar('arriba')">Arriba</button>
+        </div>
+        <div class="fila">
+            <button class="button" onclick="empezar('izquierda')">Izquierda</button>
+            <button class="button" onclick="parar()">Para</button>
+            <button class="button" onclick="empezar('abajo')">Comienza</button>
+            <button class="button" onclick="empezar('derecha')">Derecha</button>
+        </div>
+        <div class="fila">
+            <button class="button" onclick="empezar('abajo')">Abajo</button>
+        </div>
+    </div>
+
+    <script>
+        let intervalo;
+        let direccion;
+        const cuadro = document.getElementById("cyan");
+
+        function empezar(dir) {
+            direccion = dir;
+            parar();
+            intervalo = setInterval(mover, 50);
+        }
+
+        function mover() {
+            if (direccion === 'arriba') {
+                cuadro.style.top = (cuadro.offsetTop - 5) + "px";
+            }
+            if (direccion === 'abajo') {
+                cuadro.style.top = (cuadro.offsetTop + 5) + "px";
+            }
+            if (direccion === 'izquierda') {
+                cuadro.style.left = (cuadro.offsetLeft - 5) + "px";
+            }
+            if (direccion === 'derecha') {
+                cuadro.style.left = (cuadro.offsetLeft + 5) + "px";
+            }
+        }
+
+        function parar() {
+            clearInterval(intervalo);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+</head>
+<body>
+     
+    <label>
+        <input type="checkbox" id = "id1" name ="Lenguajes" value="JavaScript"> JavaScript
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id = "id2" name ="Lenguajes" value="PHP"> PHP
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id = "id3" name ="Lenguajes" value="JSP"> JSP
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id = "id4" name ="Lenguajes" value="VB.Net"> VB.Net
+    </label>
+    <br>
+    
+    <button type="button" onclick="mostrarSeleccion()">Mostrar</button>
+    
+   
+    <script language="JavaScript">
+    function mostrarSeleccion(){
+       var cuenta = document.getElementsByName("Lenguajes");
+       var seleccionados = 0;
+       for (var i = 0; i < cuenta.length; i++) {
+                if (cuenta[i].checked) { 
+                    seleccionados++; // 
+                }
+            }
+
+       alert("El numero de casillas marcadas es de: " + seleccionados);
+       
+    }
+
+    </script>
+</body>
+</html>

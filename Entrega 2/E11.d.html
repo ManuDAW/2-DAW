@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+</head>
+<body>
+    <form id="formD" onsubmit="return envioD();">
+        Ingresa la clave (Al menos 5 caracteres): 
+        <input type="text" id="claveD" name="clave" />
+        <button type="submit">Enviar</button>
+    </form>
+    <p>Si no tienes un mínimo de 5 caracteres vaciar campo. Si tienes más de 5 caracteres, enviar el formulario</p>
+    
+    <script language="JavaScript">
+        function envioD() {
+            let clave = document.getElementById("claveD").value;
+            if (clave.length < 5) {
+                alert("Longitud de clave inferior a 5 caracteres");
+                document.getElementById("claveD").value = "";
+                return false; 
+            } else {           
+                document.getElementById("claveD").value = "";
+                return true; 
+            }
+        }
+
+    </script>
+</body>
+</html>

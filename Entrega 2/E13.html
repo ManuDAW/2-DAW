@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Entrega2</title>
+    <meta name="author" content="Jose Fajardo">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calculadora {
+            border: 2px solid #ccc;
+            padding: 20px;
+            width: 220px; 
+            margin: auto;
+        }
+        input[type="text"] {
+            width: 89%;
+            padding: 10px;
+            font-size: 20px;
+            text-align: right;
+        }
+        button {
+            padding: 15px;
+            font-size: 18px;
+            width: 50px; 
+        }
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora">
+        <input type="text" id="operando" value="0" /> 
+
+        <div class="botones">
+            <button onclick="agregar(1)">1</button>
+            <button onclick="agregar(2)">2</button>
+            <button onclick="agregar(3)">3</button>
+            <button onclick="agregar('+')">+</button>
+            <button onclick="agregar(4)">4</button>
+            <button onclick="agregar(5)">5</button>
+            <button onclick="agregar(6)">6</button>
+            <button onclick="agregar('-')">-</button>
+            <button onclick="agregar(7)">7</button>
+            <button onclick="agregar(8)">8</button>
+            <button onclick="agregar(9)">9</button>
+            <button onclick="agregar('*')">x</button>
+            <button onclick="reset()">C</button>
+            <button onclick="agregar(0)">0</button>
+            <button onclick="calcular()">=</button>
+            <button onclick="agregar('/')">/</button>
+        </div>
+    </div>
+
+    <script>
+        let expresion = '0'; 
+
+        function agregar(valor) {
+            if (expresion === '0') {
+                expresion = valor.toString(); 
+            } else {
+                expresion += valor.toString(); 
+            }
+            document.getElementById('operando').value = expresion; 
+        }
+
+        function calcular() {
+            let resultado;
+            try {
+                resultado = eval(expresion.replace(/x/g, '*')); 
+            } catch (e) {
+                alert("Error en la expresión");
+                reset();
+                return;
+            }
+            expresion = resultado.toString(); 
+            document.getElementById('operando').value = expresion; 
+        }
+
+        function reset() {
+            expresion = '0'; 
+            document.getElementById('operando').value = expresion; 
+        }
+    </script>
+
+</body>
+</html>
